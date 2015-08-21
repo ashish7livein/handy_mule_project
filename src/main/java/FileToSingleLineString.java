@@ -15,7 +15,6 @@ public class FileToSingleLineString {
 			StringBuilder sb = new StringBuilder();
 			String line = "";
 			while ((line=br.readLine())!=null) {
-				
 				sb.append(line.trim());
 			}
 			System.out.println(sb.toString());
