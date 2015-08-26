@@ -1,10 +1,10 @@
-package com.ashish.java.application;
+package com.ashish.javaapplication;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Stack;
 import java.util.Vector;
 
-import com.ashish.java.application.config.LanguageCode;
+import com.ashish.javaapplication.config.LanguageCode;
 
 
 public class ParenthesisLogicTesting {

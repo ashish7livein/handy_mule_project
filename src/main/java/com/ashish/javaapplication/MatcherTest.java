@@ -1,4 +1,4 @@
-package com.ashish.java.application;
+package com.ashish.javaapplication;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

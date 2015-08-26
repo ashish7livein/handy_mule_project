@@ -1,4 +1,4 @@
-package com.ashish.java.application.model;
+package com.ashish.javaapplication.model;
 
 public class User {
 

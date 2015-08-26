@@ -1,4 +1,4 @@
-package com.ashish.java.application.config;
+package com.ashish.javaapplication.config;
 
 
 public enum LanguageCode {

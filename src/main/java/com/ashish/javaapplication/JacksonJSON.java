@@ -1,11 +1,11 @@
-package com.ashish.java.application;
+package com.ashish.javaapplication;
 import java.io.IOException;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.ashish.java.application.model.User;
+import com.ashish.javaapplication.model.User;
 
 
 public class JacksonJSON {

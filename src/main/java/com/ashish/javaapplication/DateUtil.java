@@ -1,4 +1,4 @@
-package com.ashish.java.application;
+package com.ashish.javaapplication;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;

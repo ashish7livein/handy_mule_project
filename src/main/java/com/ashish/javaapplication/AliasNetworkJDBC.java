@@ -1,4 +1,4 @@
-package com.ashish.java.application;
+package com.ashish.javaapplication;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

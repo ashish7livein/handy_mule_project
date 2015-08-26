@@ -1,4 +1,4 @@
-package com.ashish.java.application;
+package com.ashish.javaapplication;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
