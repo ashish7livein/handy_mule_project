@@ -1,3 +1,4 @@
+package com.ashish.java.application.model;
 
 public class User {
 

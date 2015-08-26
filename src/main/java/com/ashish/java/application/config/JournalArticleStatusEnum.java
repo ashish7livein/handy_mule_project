@@ -1,3 +1,4 @@
+package com.ashish.java.application.config;
 /*
  * Copyright (c) 2015 EchoStar Technologies L.L.C.
  * All Rights Reserved

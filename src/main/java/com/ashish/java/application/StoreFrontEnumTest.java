@@ -1,3 +1,6 @@
+package com.ashish.java.application;
+
+import com.ashish.java.application.config.StorefrontType;
 
 public class StoreFrontEnumTest {
 

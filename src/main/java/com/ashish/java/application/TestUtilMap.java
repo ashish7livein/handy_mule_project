@@ -1,3 +1,4 @@
+package com.ashish.java.application;
 import java.util.HashMap;
 import java.util.Map;
 
