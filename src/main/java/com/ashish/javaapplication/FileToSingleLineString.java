@@ -1,25 +1,28 @@
 package com.ashish.javaapplication;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-
 public class FileToSingleLineString {
 
 	public static void main(String args[]) {
-		
+		fileToString("/Users/ashishkumar.ashok/Projects/Bell/ratings-and-reviews/41S7V_ratings.xml");
+	}
+
+	@SuppressWarnings("resource")
+	public static String fileToString(String filePath) {
 		FileReader fr;
 		try {
-			fr = new FileReader("/Users/ashishkumar.ashok/Projects/Bell/bugzilla/6401/AIHIV/AIHIV.json");
+			fr = new FileReader(filePath);
 			BufferedReader br = new BufferedReader(fr);
 			StringBuilder sb = new StringBuilder();
 			String line = "";
-			while ((line=br.readLine())!=null) {
-				sb.append(line.trim());
+			while ((line = br.readLine()) != null) {
+				sb.append(line.trim());//.replace("\"", "\\\""));
 			}
-			System.out.println(sb.toString());
-			
+			return sb.toString();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -27,6 +30,6 @@ public class FileToSingleLineString {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		return null;
 	}
 }
