@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.1"
 	xmlns:amqp="http://www.mulesoft.org/schema/mule/amqp"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -10,7 +10,9 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
 http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
-http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
    
     <amqp:connector name="mediaViewAmqpConnector" doc:name="mediaViewAmqpConnector"
           username="heimdall" password="heimdall"
@@ -25,7 +27,12 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
     </amqp:connector> 
     <mulexml:jaxb-context name="bellJaxb" packageNames="com.echostar.model.asset.jaxb" doc:name="Bell JAXB Context"/>
    
-   
+ <vm:connector name="heimdallVMConnectr" validateConnections="true" createMultipleTransactedReceivers="true" numberOfConcurrentTransactedReceivers="200" doc:name="heimdallVMConnector">
+        <vm:queue-profile>
+            <file-queue-store/>
+        </vm:queue-profile>
+    </vm:connector>
+
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" basePath="test" doc:name="HTTP Listener Configuration"/>
     <flow name="testFlow2">
         <file:inbound-endpoint path="/Users/ashishkumar.ashok/Projects/Bell/ingest/asset/tommsprocessing" responseTimeout="10000" doc:name="File">
@@ -78,7 +85,7 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
         
        
     </flow>
-    <flow name="testFlow1">
+    <flow name="Ratings">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/rrr" allowedMethods="GET" doc:name="HTTP"/>
         <parse-template location="/Users/ashishkumar.ashok/Projects/Bell/ratings-and-reviews/fullRatingsMockup.xml" doc:name="Parse Template"/>
         <logger message="#[payload]" level="INFO" doc:name="Logger"/>
@@ -99,8 +106,54 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
                           connector-ref="farallonAmqpConnector" responseTimeout="10000" queueDurable="true" exchangeDurable="true" exchangeType="direct" doc:name="AMQP-0-9"/>
         <logger level="INFO" doc:name="Logger"/>
     </flow>
-    
-    
+
+    <flow name="rrr_flow">
+        <file:inbound-endpoint path="/Users/ashishkumar.ashok/Projects/Bell/ingest/rrr" responseTimeout="10000" doc:name="FullRatingsAndReviews" fileAge="10000">
+            <file:filename-regex-filter pattern="^.*\.(xml|XML)$" caseSensitive="true"/>
+        </file:inbound-endpoint>
+        <custom-transformer class="com.ashish.transformer.PartialVodAssetsTransformer" doc:name="PartialVodAssets"/>
+        <batch:execute name="testBatch" />
+    </flow>
+
+
+    <batch:job name="testBatch">
+        <batch:threading-profile maxThreadsActive="1000" maxBufferSize="1500"   maxThreadsIdle="1" threadWaitTimeout="-1" poolExhaustedAction="RUN"/>
+<!--         <batch:input> -->
+<!--             <file:inbound-endpoint path="/Users/ashishkumar.ashok/Projects/Bell/ingest/rrr" responseTimeout="10000" doc:name="FullRatingsAndReviews" fileAge="10000"> -->
+<!--             <file:filename-regex-filter pattern="^.*\.(xml|XML)$" caseSensitive="true"/> -->
+<!--         </file:inbound-endpoint> -->
+<!--         <custom-transformer class="com.ashish.transformer.PartialVodAssetsTransformer" doc:name="PartialVodAssets"/> -->
+<!--         </batch:input> -->
+        <batch:process-records >
+            <batch:step name="Batch_Step">
+                    <logger level="INFO" message="#[payload]" doc:name="Logger"/>
+                    <expression-component doc:name="Expression"><![CDATA[
+    	                Thread.sleep(10);
+	                ]]></expression-component>
+            </batch:step>
+        </batch:process-records>
+    </batch:job>
+
+ 
+  <flow name="testFlow1">
+        <file:inbound-endpoint path="/Users/ashishkumar.ashok/Projects/Bell/ingest/rrr" responseTimeout="10000" doc:name="FullRatingsAndReviews" fileAge="10000">
+            <file:filename-regex-filter pattern="^.*\.(xml|XML)$" caseSensitive="true"/>
+        </file:inbound-endpoint>
+        <custom-transformer class="com.ashish.transformer.PartialVodAssetsTransformer" doc:name="PartialVodAssetsTransformer"/>
+        
+        <foreach doc:name="For Each">
+            <vm:outbound-endpoint exchange-pattern="one-way" connector-ref="heimdallVMConnectr"  path="queue.rrr" doc:name="VM"/>
+        </foreach>
+    </flow>
+    <flow name="testFlow3">
+        <vm:inbound-endpoint exchange-pattern="one-way" path="queue.rrr"  connector-ref="heimdallVMConnectr" doc:name="FarallonNotificationVM">
+            <vm:transaction action="ALWAYS_BEGIN"/>
+        </vm:inbound-endpoint>
+        <logger level="INFO" message="#[payload]" doc:name="Logger"/>
+         <expression-component doc:name="Expression">
+           Thread.sleep(20000);
+       </expression-component> 
+    </flow>
 </mule>
 
 

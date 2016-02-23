@@ -15,7 +15,9 @@
 		<eclipsePluginVersion>2.8</eclipsePluginVersion>
 		<jdkName>JavaSE-1.7</jdkName>
 		<jdk.version>1.7</jdk.version>
-		<junit.version>4.9</junit.version>
+		<junit.version>4.11</junit.version>
+		<hamcrest.version>1.3</hamcrest.version>
+		<json-path.version>0.8.1</json-path.version>
 		<properties-enc.version>0.1.0</properties-enc.version>
 		<jackson.version>2.2.2</jackson.version>
 		<mongo.driver.version>2.11.4</mongo.driver.version>
@@ -430,31 +432,6 @@
 			<version>${mule.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- for testing -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.mule.tests</groupId> -->
-<!-- 			<artifactId>mule-tests-functional</artifactId> -->
-<!-- 			<version>${mule.version}</version> -->
-<!-- 			<scope>test</scope> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>mockobjects</groupId> -->
-<!-- 			<artifactId>mockobjects-core</artifactId> -->
-<!-- 			<version>0.09</version> -->
-<!-- 			<scope>test</scope> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>junit</groupId> -->
-<!-- 			<artifactId>junit</artifactId> -->
-<!-- 			<version>${junit.version}</version> -->
-<!-- 			<scope>test</scope> -->
-<!-- 		</dependency> -->
-<!-- 	    <dependency> -->
-<!-- 			<groupId>com.cloveretl</groupId> -->
-<!-- 			<artifactId>cloveretl-engine</artifactId> -->
-<!-- 			<version>${mule.version}</version> -->
-<!-- 			<scope>test</scope> -->
-<!-- 		</dependency> -->
 		<dependency>
 	            <groupId>commons-dbcp</groupId>
 	            <artifactId>commons-dbcp</artifactId>
@@ -522,7 +499,7 @@
 	            <artifactId>mongo-java-driver</artifactId>
 	            <version>${mongo.driver.version}</version>
 	    </dependency>
-	    <!-- Dave Taylor ADDED MANUALLY begin      -->
+	    <!-- Manually ADDED MANUALLY begin      -->
 	    <dependency>
 	            <groupId>org.json</groupId>
 	            <artifactId>json</artifactId>
@@ -606,8 +583,39 @@
 		    <version>2.5</version>
 		    <scope>provided</scope>
 		</dependency>
-     <!-- Dave Taylor ADDED MANUALLY end     -->
+		<dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+	            <groupId>org.hamcrest</groupId>
+	            <artifactId>hamcrest-all</artifactId>
+	            <version>${hamcrest.version}</version>
+	            <scope>test</scope>
+	    </dependency>
+	    <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${json-path.version}</version>
+            <scope>test</scope>
+        </dependency>
 
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path-assert</artifactId>
+            <version>${json-path.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-library</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+	    
+     <!-- Manually ADDED MANUALLY end     -->
     <dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-requester</artifactId>
@@ -652,6 +660,12 @@
     <dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-http</artifactId>
+            <version>3.6.1</version>
+            <scope>provided</scope>
+        </dependency>
+    <dependency>
+            <groupId>com.mulesoft.muleesb.modules</groupId>
+            <artifactId>mule-module-batch-ee</artifactId>
             <version>3.6.1</version>
             <scope>provided</scope>
         </dependency>
